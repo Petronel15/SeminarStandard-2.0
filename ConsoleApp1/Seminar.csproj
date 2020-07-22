@@ -50,8 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProductionCode\BlessingMessage.cs" />
     <Compile Include="ProductionCode\Greeting.cs" />
-    <Compile Include="ProductionCode\Message.cs" />
+    <Compile Include="ProductionCode\IFormatedMessage.cs" />
+    <Compile Include="ProductionCode\MessageFactory.cs" />
+    <Compile Include="ProductionCode\RoyalMessage.cs" />
     <Compile Include="ProductionCode\ShoutingMessage.cs" />
     <Compile Include="ProductionCode\SimpleMessage.cs" />
     <Compile Include="Program.cs" />

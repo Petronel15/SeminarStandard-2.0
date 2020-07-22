@@ -32,7 +32,6 @@ namespace SeminarStandard
 			ExecuteTest("Gigi", "Hello, Gigi.");
 		}
 
-
 		[Test]
 		public void ShouldHandleNull()
 		{
@@ -47,23 +46,16 @@ namespace SeminarStandard
 		}
 
 		[Test]
-		public void ShouldHandleTwoNamesArray()
+		public void ShouldHandleTwoNames()
 		{
-			//Arrange
-			string[] names = { "Jill", "Jane" };
-
-			//Act
-			string result = greeting.GreetTwoNames(names);
-
-			//Assert
-			Assert.AreEqual("Hello, Jill and Jane.", result);
+			ExecuteTest("Jill,Jane", "Hello, Jill and Jane.");
 		}
 
 
 		[Test]
-		public void ShouldHandleTwoNames()
+		public void ShouldHandleTwoNamesShouting()
 		{
-			ExecuteTest("Jill,Jane", "Hello, Jill and Jane.");
+			ExecuteTest("JERRY,JILL", "HELLO JERRY AND JILL!");
 		}
 
 
@@ -89,6 +81,45 @@ namespace SeminarStandard
 		public void ShouldHandleMultipleMoreMixed()
 		{
 			ExecuteTest("AMY,BRIAN,Tudor,Andreea,GEORGE,Marian", "Hello, Tudor, Andreea, and Marian. AND HELLO AMY, BRIAN, AND GEORGE!");
+		}
+		[Test]
+		public void ShouldGreetRoyal()
+		{
+			ExecuteTest("King Arthur", "Your Majesty, King Arthur!");
+		}
+
+		[Test]
+		public void ShouldGreetTwoRoyalNames()
+		{
+			ExecuteTest("Queen Elizabeth,King Arthur", "Their Majesties, Queen Elizabeth & King Arthur!");
+		}
+
+		[Test]
+		public void ShouldGreetMultipleRoyalNames()
+		{
+			ExecuteTest("Queen Elizabeth,King Arthur,King Paul", "Their Majesties, Queen Elizabeth, King Arthur & King Paul!");
+		}
+
+		[Test]
+		public void ShouldGreetSimpleAndRoyalNames()
+		{
+			ExecuteTest("Queen Elizabeth,Gigi,King Arthur,Brian", "Their Majesties, Queen Elizabeth & King Arthur! And Hello, Gigi and Brian.");
+		}
+
+		[Test]
+		public void ShouldGreetMultipleSimpleAndRoyalNames()
+		{
+			ExecuteTest("King Arthur,Gigi", "Your Majesty, King Arthur! And Hello, Gigi.");
+		}
+		[Test]
+		public void ShouldGreetShoutingAndRoyalNames()
+		{
+			ExecuteTest("Queen Elizabeth,JANE", "Your Majesty, Queen Elizabeth! AND HELLO JANE!");
+		}
+		[Test]
+		public void ShouldHandleMultipleMoreMixedNames()
+		{
+			ExecuteTest("AMY,BRIAN,Tudor,King Arthur,Andreea,GEORGE,Queen Elizabeth,Marian", "Their Majesties, King Arthur & Queen Elizabeth! Hello, Tudor, Andreea, and Marian. AND HELLO AMY, BRIAN, AND GEORGE!");
 		}
 	}
 }

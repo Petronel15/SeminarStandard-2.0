@@ -1,4 +1,5 @@
-﻿using SeminarStandard.ProductionCode;
+﻿using ConsoleApp1.ProductionCode;
+using SeminarStandard.ProductionCode;
 using System;
 using System.Linq;
 
@@ -7,127 +8,101 @@ namespace SeminarStandard
 	internal class Greeting
 	{
 		const string hello = "Hello";
-		const string and = "and";
-		const string HELLO = "HELLO";
-		const string AND = "AND";
 		const string coma = ",";
 		string result = string.Empty;
-
+		MessageFactory messageFactory = new MessageFactory();
+		
 		internal string Greet(string name)
 		{
-			if (string.IsNullOrEmpty(name))
-			{
-				result = $"{hello}, my friend.";
-			}
+			IFormatedMessage message = messageFactory.GetMessageByName(name);
+
+			if (message == null)
+				return $"{hello}, my friend.";
 			else
 			{
 				var names = name.Split(',');
-				if (names.Length == 2)
-				{
-					result = GetTwoNames(names);
-				}
-				else if (names.Length > 2)
-				{
-					result = GreetMultipleNames(names);
-				}
+				if (names.Length >= 2)
+					result = ProcessMultipleNames(names);
 				else
-				{
-					result = GetSingleNameMessage(name);
-				}
+					result = message.GetSingleNameMessage(name);
 			}
 
 			return result;
 		}
 
-		internal string GreetMultipleNames(string[] names)
+		internal string ProcessMultipleNames(string[] names)
 		{
-			//Use string builder.
-			string[] shoutingNames = names.Where(name => name == name.ToUpper()).ToArray();
-			string[] simpleNames = names.Where(name => name != name.ToUpper()).ToArray();
+			//TODO: Use string builder.
+			//TODO: MAKE UNIT TESTS FOR FACTORY, FORMATED MESSAGE CLASSSES
+			IFormatedMessage simpleMessage = new SimpleMessage();
+			IFormatedMessage shoutingMessage = new ShoutingMessage();
+			IFormatedMessage royalMessage = new RoyalMessage();
+			simpleMessage.SetFilteredNames(names);
+			shoutingMessage.SetFilteredNames(names);
+			royalMessage.SetFilteredNames(names);
 
-			string simpleGreetings = GetNamesGreetingMesage(simpleNames);
-			string shoutingGreetings = GetNamesGreetingMesage(shoutingNames, true);
+			string simpleGreetings = GetNamesGreetingMesage(simpleMessage);
+			string shoutingGreetings = GetNamesGreetingMesage(shoutingMessage);
+			string royalGreetings = GetNamesGreetingMesage(royalMessage);
 
-			if (simpleGreetings.Length > 0)
+			if (royalGreetings.Length > 0 && simpleGreetings.Length > 0 && shoutingGreetings.Length > 0)
 			{
-				result = simpleGreetings;
+				result = royalGreetings + " " + simpleGreetings + " AND " + shoutingGreetings;
 			}
 
-			if (shoutingGreetings.Length > 0 && simpleGreetings.Length > 0)
+			else if (royalGreetings.Length > 0 && simpleGreetings.Length > 0)
 			{
-				result = result + " AND " + shoutingGreetings;
+				result = royalGreetings + " And " + simpleGreetings;
+			}
+			else if (royalGreetings.Length > 0 && shoutingGreetings.Length > 0)
+			{
+				result = royalGreetings + " AND " + shoutingGreetings;
+			}
+			else if (simpleGreetings.Length > 0 && shoutingGreetings.Length > 0)
+			{
+				result = simpleGreetings + " AND " + shoutingGreetings;
+			}
+
+
+			else if (royalGreetings.Length > 0)
+			{
+				result = royalGreetings;
 			}
 			else if (simpleGreetings.Length > 0)
 			{
 				result = simpleGreetings;
 			}
-			else
+			else if (shoutingGreetings.Length > 0)
 			{
-				result = result + shoutingGreetings;
+				result = shoutingGreetings;
 			}
 
 			return result;
 		}
 
-		private string GetNamesGreetingMesage(string[] names, bool isShouting = false)
+		private string GetNamesGreetingMesage(IFormatedMessage message)
 		{
-			var message = new Message();
-
 			string res = string.Empty;
-			if (names.Length > 0)
+			if (message.Names.Length > 0)
 			{
-				res = message.StartMessage(names[0]);
+				res = message.GetStartMessage(message.Names[0]);
 
-				if (names.Length > 2)
+				if (message.Names.Length > 2)
 				{
-					for (int iCount = 1; iCount < names.Length; iCount++)
+					for (int iCount = 1; iCount < message.Names.Length; iCount++)
 					{
-						if (iCount != names.Length - 1)
-						{
-							res = res + coma + " " + names[iCount];
-						}
+						if (iCount != message.Names.Length - 1)
+							res = res + coma + " " + message.Names[iCount];
 						else
-						{
-							res = res + message.EndMessage(names[iCount]);
-						}
+							res = message.GetEndMessage(res, message.Names[iCount]);
 					}
 				}
-				else if (names.Length == 2)
-				{
-					res = message.TwoNamesMessage(names[0], names[1]);
-				}
+				else if (message.Names.Length == 2)
+					res = message.GetTwoNamesMessage(message.Names[0], message.Names[1]);
 				else
-				{
-					res = GetSingleNameMessage(names[0]);
-				}
+					res = message.GetSingleNameMessage(message.Names[0]);
 			}
 			return res;
-		}
-
-		private string GetTwoNames(string[] names)
-		{
-			return $"{hello}, {names[0]} {and} {names[1]}.";
-		}
-
-		private string GetSingleNameMessage(string name)
-		{
-			if (name == name.ToUpper())
-			{
-				return $"{HELLO} {name}!";
-			}
-			else
-				return $"{hello}, {name}.";
-		}
-
-		internal string GreetTwoNames(string[] names)
-		{
-			string result = String.Empty;
-			if (names.Length == 2)
-			{
-				result = $"{hello}, {names[0]} {and} {names[1]}.";
-			}
-
-			return result;
 		}
 	}
 }

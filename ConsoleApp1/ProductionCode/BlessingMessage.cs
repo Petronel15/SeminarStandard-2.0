@@ -1,23 +1,21 @@
-﻿using ConsoleApp1.ProductionCode;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeminarStandard.ProductionCode
+namespace ConsoleApp1.ProductionCode
 {
-	public class SimpleMessage : IFormatedMessage
+	public class BlessingMessage : IFormatedMessage
 	{
-		const string hello = "Hello";
-		const string and = "and";
-		const string coma = ",";
+		const string hello = "May you be blessed";
+		const string and = "&";
 
 		public string[] Names { get; set; }
 
 		public string GetStartMessage(string name)
 		{
-			return $"{hello}{coma} {name}";
+			return $"{hello} {name}";
 		}
 
 		public string GetEndMessage(string res, string name)
@@ -27,12 +25,12 @@ namespace SeminarStandard.ProductionCode
 
 		public string GetTwoNamesMessage(string name1, string name2)
 		{
-			return $"{hello}{coma} {name1} {and} {name2}.";
+			return $"{hello} {name1} {and} {name2}.";
 		}
 
 		public void SetFilteredNames(string[] names)
 		{
-			Names = names.Where(name => (name != name.ToUpper()) && !(name.Contains("King")) && !(name.Contains("Queen"))).ToArray();
+			Names = names.Where(name => name != name.ToUpper()).ToArray();
 		}
 
 		public string GetSingleNameMessage(string name)
